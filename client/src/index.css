@@ -1,0 +1,44 @@
+* {
+  font-family: "Montserrat";
+  font-weight: 700;
+  color:black;
+
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.sv-text {
+  width: 30%;
+}
+
+li {
+  text-align: left;
+}
+
+.form-container .thank-you-message{
+  font-family: "Montserrat",sans-serif;
+  font-weight: 700;
+  font-size: large;
+  border-radius: 25px;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: #47A01A;
+  width: 400px;
+  padding: 50px;
+}
+
+.form-container {
+  background-color: #47A01A;
+  border-radius: 25px;
+  width: 70%;
+  margin-left:auto;
+  margin-right:auto;
+}
