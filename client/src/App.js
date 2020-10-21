@@ -9,11 +9,13 @@ function onComplete(result){
   console.log("Result JSON:\n" + JSON.stringify(modifySurveyResults(result)))
   var data =  modifySurveyResults(result)
   data.forEach((item) => {
-    var info = JSON.stringify(item)
-    var request = new XMLHttpRequest();
-    request.open('POST', '/Survey', true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    request.send(info);
+    if(item.question_id!=1){
+      var info = JSON.stringify(item)
+      var request = new XMLHttpRequest();
+      request.open('POST', '/Survey', true);
+      request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      request.send(info);
+    }
   })
   }
 
@@ -109,10 +111,10 @@ var json = {
   for(var key in survey.data) {
     var question = survey.getQuestionByValueName(key);
     if(!!question) {
-      if(key==1){
+      if(question.name=="1"){
         var employee = question.value;
       }
-      if(key==2){
+      if(question.name=="2"){
         var email = question.value;
       }
       else{
