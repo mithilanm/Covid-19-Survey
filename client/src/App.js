@@ -15,14 +15,14 @@ function onComplete(result){
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(info);
   })
-}
+  }
 
 function onValueChanged(result) {
     console.log("value changed!");
 }
 var json = {
       "title": "FirstDash Employee Wellness Survey",
-      "description": "Thank you for using our service. We would highly appreciate it if you would take the time to fill our employee wellness survey. The survey will help us better serve our employees.",
+      "description": "Thank you for taking the time to complete this survey. Your cooperation is appreciated!",
       "pages": [
           {
               "name": "page1",
