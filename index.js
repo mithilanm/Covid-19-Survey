@@ -72,7 +72,8 @@ app.post('/Survey', (req, res) => {
   const answer = req.body.answer;
   const question_id = req.body.question_id;
   const employee_id = req.body.employee_id;
-  con.query('INSERT into survey_answers (answer, question_id, employee_id) VALUES (?, ?, ?)', [answer, question_id, employee_id],
+  const email = req.body.email;
+  con.query('INSERT into survey_answers (answer, question_id, employee_id, email) VALUES (?, ?, ?, ?)', [answer, question_id, employee_id, email],
   (err, rows, fields) => {
     if(err) {
       console.log(err);

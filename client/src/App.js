@@ -34,50 +34,62 @@ var json = {
                       "inputType": "number",
                       "hideNumber": false
                 },
+                { 
+                      "type": "text",
+                      "name": "2",
+                      "title": "Email",
+                      "inputType": "email",
+                      "hideNumber": false,
+                       validators: [
+                      {
+                       type: "email"
+                       }
+                      ]
+                },
                 {
                     "type": "radiogroup",
-                    "name": "2",
+                    "name": "3",
                     "title": "Difficulty breathing or shortness of breath",
                     "choices": ["Yes", "No"]
                 }, 
                 {
                   "type": "radiogroup",
-                  "name": "3",
+                  "name": "4",
                   "title": "Cough",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "4",
+                  "name": "5",
                   "title": "Sore throat, trouble swallowing",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "5",
+                  "name": "6",
                   "title": "Runny nose/ stuffy nose or nasal congestion",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "6",
+                  "name": "7",
                   "title": "Decrease or loss of smell or taste",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "7",
+                  "name": "8",
                   "title": "Nausea, vomiting, diarrhea, abdominal pain",
                   "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "8",
+                        "name": "9",
                         "title": "Have you travelled outside of Canada in the past 14 days?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "9",
+                        "name": "10",
                         "title":"Have you had close contact with a confirmed or probable case of COVID-19?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "10",
+                        "name": "11",
                         "title":"I believe the answers stated in this wellness survey are true",
                         "choices": ["Yes", "No"]
                 }, {
@@ -100,8 +112,11 @@ var json = {
       if(key==1){
         var employee = question.value;
       }
+      if(key==2){
+        var email = question.value;
+      }
       else{
-        var item = {answer: question.value, question_id: question.name, employee_id: employee };
+        var item = {answer: question.value, question_id: question.name, employee_id: employee, email: email };
         resultData.push(item);
       }
     }
