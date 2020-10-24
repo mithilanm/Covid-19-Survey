@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import './App.css';
 import "survey-react/survey.css"
 import * as Survey from "survey-react";
@@ -6,8 +6,11 @@ import * as Survey from "survey-react";
 function onComplete(result){
   //console.log("Result JSON:\n" + JSON.stringify(result.data));
   //parseData(JSON.stringify(result.data, null, 3))
-  console.log("Result JSON:\n" + JSON.stringify(modifySurveyResults(result)))
-  var data =  modifySurveyResults(result)
+  //console.log("Result JSON:\n" + JSON.stringify(modifySurveyResults(result)))
+  var values =  modifySurveyResults(result)
+  let data = values.resultData;
+  let output_data = values.output;
+  console.log(JSON.stringify(output_data))
   data.forEach((item) => {
     if(item.question_id!=1){
       var info = JSON.stringify(item)
@@ -17,7 +20,14 @@ function onComplete(result){
       request.send(info);
     }
   })
-  }
+  output_data.forEach((result_item) => {
+    var resultOutput = JSON.stringify(result_item)
+    var request = new XMLHttpRequest();
+    request.open('POST', '/Survey_Results', true);
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(resultOutput);
+  })
+}
 
 function onValueChanged(result) {
     console.log("value changed!");
@@ -107,24 +117,35 @@ var json = {
 
 
   function modifySurveyResults(survey) {
-  var resultData = [];
-  for(var key in survey.data) {
-    var question = survey.getQuestionByValueName(key);
-    if(!!question) {
-      if(question.name=="1"){
-        var employee = question.value;
-      }
-      if(question.name=="2"){
-        var email = question.value;
-      }
-      else{
-        var item = {answer: question.value, question_id: question.name, employee_id: employee, email: email };
-        resultData.push(item);
+    var resultData = [];
+    var output = [];
+    var fail = 0
+    for(var key in survey.data) {
+      var question = survey.getQuestionByValueName(key);
+      if(!!question) {
+        if(question.name=="1"){
+          var employee = question.value;
+        }
+        if(question.name=="2"){
+          var email = question.value;
+        }
+        else{
+          if((question.name == "3" && question.value=="Yes") || (question.name == "4" && question.value=="Yes") || (question.name == "5" && question.value=="Yes")){
+            fail = 1
+          }
+          var item = {answer: question.value, question_id: question.name, employee_id: employee, email: email };
+          resultData.push(item);
+        }
       }
     }
+    item = { vip_id: employee, email: email, pass_type: fail }
+    output.push(item);
+    return {
+      resultData, 
+      output
+    };
   }
-  return resultData;
-  }
+
 
   function App() {
     var model = new Survey.Model(json);

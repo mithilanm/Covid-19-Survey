@@ -85,6 +85,38 @@ app.post('/Survey', (req, res) => {
   })
 });
 
+//Survey Results
+/*
+app.get("/Survey_Results", cors(), async (req, res, next) => {
+  try {
+    con.query("SELECT * FROM survey_answers", (err, rows) => {
+      if (err) {
+        return res.send(err);
+      } else return res.json({ data: rows });
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+*/
+
+app.post('/Survey_Results', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const vip_id = req.body.vip_id;
+  const email = req.body.email;
+  const pass_type = req.body.pass_type;
+  con.query('INSERT into survey_results (vip_id, email, pass_type) VALUES (?, ?, ?)', [vip_id, email, pass_type],
+  (err, rows, fields) => {
+    if(err) {
+      console.log(err);
+      return res.send(err);
+    }
+    else {
+      res.send('Thanks!')
+    }
+  })
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
