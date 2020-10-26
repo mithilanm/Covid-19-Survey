@@ -138,7 +138,7 @@ var json = {
         }
       }
     }
-    item = { vip_id: employee, email: email, pass_type: fail }
+    item = { vip_id: employee, email: email, time: new Date().toISOString().slice(0, 19).replace('T', ' '), pass_type: fail }
     output.push(item);
     return {
       resultData, 

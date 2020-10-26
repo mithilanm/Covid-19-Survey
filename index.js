@@ -104,8 +104,9 @@ app.post('/Survey_Results', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const vip_id = req.body.vip_id;
   const email = req.body.email;
+  const time = req.body.time;
   const pass_type = req.body.pass_type;
-  con.query('INSERT into survey_results (vip_id, email, pass_type) VALUES (?, ?, ?)', [vip_id, email, pass_type],
+  con.query('INSERT into survey_results (vip_id, email, time, pass_type) VALUES (?, ?, ?, ?)', [vip_id, email, time, pass_type],
   (err, rows, fields) => {
     if(err) {
       console.log(err);
@@ -121,7 +122,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Mixing it up on port ${PORT}`);
 });
