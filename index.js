@@ -29,27 +29,6 @@ con.connect((err) => {
   //console.log(con);
 });
 
-const sessionStore = new MySQLStore(
-  {
-    expiration: 1825 * 86400 * 1000,
-    endConnectionOnClose: false,
-  },
-  con
-);
-
-app.use(
-  session({
-    key: "4289thgub4390ghejgbsdifhsd",
-    secret: "mg3g48hddncnjnALKFJjdhfadfj",
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1825 * 86400 * 1000,
-      httpOnly: false,
-    },
-  })
-);
 // Serve static files from the React frontend app
 app.use(
   express.static(path.join(__dirname, "client/build")),
@@ -104,9 +83,12 @@ app.post('/Survey_Results', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const vip_id = req.body.vip_id;
   const email = req.body.email;
-  const time = req.body.time;
+  const date = req.body.date;
   const pass_type = req.body.pass_type;
+  /*
   con.query('INSERT into survey_results (vip_id, email, time, pass_type) VALUES (?, ?, ?, ?)', [vip_id, email, time, pass_type],
+  */
+  con.query('INSERT INTO survey_results (vip_id, email, date, pass_type) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE pass_type=?', [vip_id, email, date, pass_type, pass_type],
   (err, rows, fields) => {
     if(err) {
       console.log(err);
