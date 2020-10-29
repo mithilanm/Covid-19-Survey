@@ -42,16 +42,10 @@ var json = {
                 { 
                       "type": "text",
                       "name": "1",
-                      "title": "Employee ID",
-                      "inputType": "number",
-                      "hideNumber": false
-                },
-                { 
-                      "type": "text",
-                      "name": "2",
                       "title": "Email",
                       "inputType": "email",
                       "hideNumber": false,
+                       isRequired: true,
                        validators: [
                       {
                        type: "email"
@@ -60,54 +54,54 @@ var json = {
                 },
                 {
                     "type": "radiogroup",
-                    "name": "3",
+                    "name": "2",
                     "title": "Difficulty breathing or shortness of breath",
                     "choices": ["Yes", "No"]
                 }, 
                 {
                   "type": "radiogroup",
-                  "name": "4",
+                  "name": "3",
                   "title": "Cough",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "5",
+                  "name": "4",
                   "title": "Sore throat, trouble swallowing",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "6",
+                  "name": "5",
                   "title": "Runny nose/ stuffy nose or nasal congestion",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "7",
+                  "name": "6",
                   "title": "Decrease or loss of smell or taste",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "8",
+                  "name": "7",
                   "title": "Nausea, vomiting, diarrhea, abdominal pain",
                   "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "9",
+                        "name": "8",
                         "title": "Have you travelled outside of Canada in the past 14 days?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "10",
+                        "name": "9",
                         "title":"Have you had close contact with a confirmed or probable case of COVID-19?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "11",
+                        "name": "10",
                         "title":"I believe the answers stated in this wellness survey are true",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "html",
                         "name": "results",
-                        "html": "<article class='intro'>  <h1 class='intro__heading intro__heading--income title'>Results of Screening Questions: </h1><ul> \t<li> If the individual answers NO to all questions from 1 through 3, they passed and can enter the workplace \t</li> \t<li>\t\t<p>If the individual answers YES to any questions from 1 through 3, they have not PASSED and should be advised that they should not enter the workplace (including any outdoor, or partially outdoor, workplaces). They should go home to self-isolate immediately and contact their health care provider or Telehealth Ontario (1 866-797-0000) to find out if they need a COVID-19 test.</p> \t\t</li></div> </article>"
+                        "html": "<article class='intro'>  <h1 class='intro__heading intro__heading--income title'>Results of Screening Questions: </h1><ul> \t<li> If the individual answers NO to all questions from 1 through 8, they passed and can enter the workplace \t</li> \t<li>\t\t<p>If the individual answers YES to any questions from 1 through 8, they have not PASSED and should be advised that they should not enter the workplace (including any outdoor, or partially outdoor, workplaces). They should go home to self-isolate immediately and contact their health care provider or Telehealth Ontario (1 866-797-0000) to find out if they need a COVID-19 test.</p> \t\t</li></div> </article>"
                 } 
               ]
           }
@@ -124,21 +118,21 @@ var json = {
       var question = survey.getQuestionByValueName(key);
       if(!!question) {
         if(question.name=="1"){
-          var employee = question.value;
-        }
-        if(question.name=="2"){
           var email = question.value;
         }
+        if(question.name=="10" && question.value=="No"){
+          fail=1
+        }
         else{
-          if((question.name == "3" && question.value=="Yes") || (question.name == "4" && question.value=="Yes") || (question.name == "5" && question.value=="Yes")){
+          if(question.name!="10" && question.value=="Yes"){
             fail = 1
           }
-          var item = {answer: question.value, question_id: question.name, employee_id: employee, email: email };
+          var item = { answer: question.value, question_id: question.name, email: email };
           resultData.push(item);
         }
       }
     }
-    item = { vip_id: employee, email: email, date: new Date().toISOString().slice(0, 10), pass_type: fail }
+    item = { email: email, date: new Date().toISOString().slice(0, 10), pass_type: fail }
     output.push(item);
     return {
       resultData, 

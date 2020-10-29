@@ -50,9 +50,8 @@ app.post('/Survey', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const answer = req.body.answer;
   const question_id = req.body.question_id;
-  const employee_id = req.body.employee_id;
   const email = req.body.email;
-  con.query('INSERT into survey_answers (answer, question_id, employee_id, email) VALUES (?, ?, ?, ?)', [answer, question_id, employee_id, email],
+  con.query('INSERT into survey_answers (answer, question_id, email) VALUES (?, ?, ?)', [answer, question_id, email],
   (err, rows, fields) => {
     if(err) {
       console.log(err);
@@ -64,31 +63,13 @@ app.post('/Survey', (req, res) => {
   })
 });
 
-//Survey Results
-/*
-app.get("/Survey_Results", cors(), async (req, res, next) => {
-  try {
-    con.query("SELECT * FROM survey_answers", (err, rows) => {
-      if (err) {
-        return res.send(err);
-      } else return res.json({ data: rows });
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-*/
 
 app.post('/Survey_Results', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const vip_id = req.body.vip_id;
   const email = req.body.email;
   const date = req.body.date;
   const pass_type = req.body.pass_type;
-  /*
-  con.query('INSERT into survey_results (vip_id, email, time, pass_type) VALUES (?, ?, ?, ?)', [vip_id, email, time, pass_type],
-  */
-  con.query('INSERT INTO survey_results (vip_id, email, date, pass_type) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE pass_type=?', [vip_id, email, date, pass_type, pass_type],
+  con.query('INSERT INTO survey_results (email, date, pass_type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE pass_type=?', [email, date, pass_type, pass_type],
   (err, rows, fields) => {
     if(err) {
       console.log(err);
