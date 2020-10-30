@@ -35,13 +35,29 @@ function onValueChanged(result) {
 var json = {
       "title": "FirstDash Employee Wellness Survey",
       "description": "Thank you for taking the time to complete this survey. Your cooperation is appreciated!",
+      showProgressBar: "bottom",
+      goNextPageAutomatic: true,
+      showNavigationButtons: true,
       "pages": [
           {
-              "name": "page1",
-              "elements": [
+            name:"page1", "elements": [
+              { 
+                    "type": "radiogroup",
+                    "name": "1",
+                    "title": "Are you an employee, returning visitor, new visitor?",
+                    choices: [
+                      "Employee", "Returning Visitor", "New Visitor"
+                    ],
+                    "hideNumber": false,
+                      isRequired: true,
+              }
+            ]
+          }, 
+          {
+           name:"page3", visibleIf:"{1}='Employee'", "elements": [
                 { 
                       "type": "text",
-                      "name": "1",
+                      "name": "2",
                       "title": "Email",
                       "inputType": "email",
                       "hideNumber": false,
@@ -52,50 +68,160 @@ var json = {
                        }
                       ]
                 },
+              ]
+          }, {
+           name:"page4", visibleIf:"{1}='Returning Visitor'", "elements": [
+                { 
+                      "type": "text",
+                      "name": "3",
+                      "title": "Name of person you are here to see?",
+                      "inputType": "text",
+                      "hideNumber": false,
+                       isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "2",
+                      "title": "Email",
+                      "inputType": "email",
+                      "hideNumber": false,
+                       isRequired: true,
+                       validators: [
+                      {
+                       type: "email"
+                       }
+                      ]
+                },
+              ]
+          }, {
+            name:"page5", visibleIf:"{1}='New Visitor'","elements": [
+                { 
+                      "type": "text",
+                      "name": "4",
+                      "title": "Name",
+                      "inputType": "text",
+                      "hideNumber": false,
+                       isRequired: true,
+                },
+                { 
+                      "type": "radiogroup",
+                      "name": "5",
+                      "title": "Sex",
+                      choices: [
+                        "Male", "Female"
+                      ],
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "6",
+                      "title": "Work Address",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "7",
+                      "title": "City",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "8",
+                      "title": "Province",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "9",
+                      "title": "Postal Code",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "2",
+                      "title": "Email",
+                      "inputType": "email",
+                      "hideNumber": false,
+                       isRequired: true,
+                       validators: [
+                      {
+                       type: "email"
+                       }
+                      ]
+                },
+                { 
+                      "type": "text",
+                      "name": "10",
+                      "title": "Work Phone",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "11",
+                      "title": "Company Name",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+                { 
+                      "type": "text",
+                      "name": "3",
+                      "title": "Name of person you are here to see?",
+                      "hideNumber": false,
+                        isRequired: true,
+                },
+              ]
+          }, {
+            name:"page6", "elements": [
                 {
                     "type": "radiogroup",
-                    "name": "2",
+                    "name": "12",
                     "title": "Difficulty breathing or shortness of breath",
                     "choices": ["Yes", "No"]
                 }, 
                 {
                   "type": "radiogroup",
-                  "name": "3",
+                  "name": "13",
                   "title": "Cough",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "4",
+                  "name": "14",
                   "title": "Sore throat, trouble swallowing",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "5",
+                  "name": "15",
                   "title": "Runny nose/ stuffy nose or nasal congestion",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "6",
+                  "name": "16",
                   "title": "Decrease or loss of smell or taste",
                   "choices": ["Yes", "No"]
                 }, {
                   "type": "radiogroup",
-                  "name": "7",
+                  "name": "17",
                   "title": "Nausea, vomiting, diarrhea, abdominal pain",
                   "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "8",
+                        "name": "18",
                         "title": "Have you travelled outside of Canada in the past 14 days?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "9",
+                        "name": "19",
                         "title":"Have you had close contact with a confirmed or probable case of COVID-19?",
                         "choices": ["Yes", "No"]
                 }, {
                         "type": "radiogroup",
-                        "name": "10",
+                        "name": "20",
                         "title":"I believe the answers stated in this wellness survey are true",
                         "choices": ["Yes", "No"]
                 }, {
@@ -103,7 +229,7 @@ var json = {
                         "name": "results",
                         "html": "<article class='intro'>  <h1 class='intro__heading intro__heading--income title'>Results of Screening Questions: </h1><ul> \t<li> If the individual answers NO to all questions from 1 through 8, they passed and can enter the workplace \t</li> \t<li>\t\t<p>If the individual answers YES to any questions from 1 through 8, they have not PASSED and should be advised that they should not enter the workplace (including any outdoor, or partially outdoor, workplaces). They should go home to self-isolate immediately and contact their health care provider or Telehealth Ontario (1 866-797-0000) to find out if they need a COVID-19 test.</p> \t\t</li></div> </article>"
                 } 
-              ]
+            ]
           }
       ],
       "showQuestionNumbers": "off"
@@ -117,14 +243,14 @@ var json = {
     for(var key in survey.data) {
       var question = survey.getQuestionByValueName(key);
       if(!!question) {
-        if(question.name=="1"){
+        if(question.name=="2"){
           var email = question.value;
         }
-        if(question.name=="10" && question.value=="No"){
+        if(question.name=="20" && question.value=="No"){
           fail=1
         }
         else{
-          if(question.name!="10" && question.value=="Yes"){
+          if(question.name!="20" && question.value=="Yes"){
             fail = 1
           }
           var item = { answer: question.value, question_id: question.name, email: email };
