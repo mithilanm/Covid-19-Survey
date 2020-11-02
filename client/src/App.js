@@ -10,9 +10,11 @@ function onComplete(result){
   var values =  modifySurveyResults(result)
   let data = values.resultData;
   let output_data = values.output;
+  let visitor_data = values.visitor;
   console.log(JSON.stringify(output_data))
+  console.log(JSON.stringify(data))
   data.forEach((item) => {
-    if(item.question_id!=1){
+    if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4 && item.question_id!=8 && item.question_id!=11){
       var info = JSON.stringify(item)
       var request = new XMLHttpRequest();
       request.open('POST', '/Survey', true);
@@ -27,6 +29,15 @@ function onComplete(result){
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(resultOutput);
   })
+  if(visitor_data){
+    visitor_data.forEach((visitor_item) => {
+    var resultVisitor= JSON.stringify(visitor_item)
+    var request = new XMLHttpRequest();
+    request.open('POST', '/NewVisitor/${devID[0].Id', true);
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(resultVisitor);
+    })
+  }
 }
 
 function onValueChanged(result) {
@@ -36,7 +47,7 @@ var json = {
       "title": "FirstDash Employee Wellness Survey",
       "description": "Thank you for taking the time to complete this survey. Your cooperation is appreciated!",
       showProgressBar: "bottom",
-      goNextPageAutomatic: true,
+      goNextPageAutomatic: false,
       showNavigationButtons: true,
       "pages": [
           {
@@ -44,7 +55,7 @@ var json = {
               { 
                     "type": "radiogroup",
                     "name": "1",
-                    "title": "Are you an employee, returning visitor, new visitor?",
+                    "title": "Are you an employee, returning visitor or new visitor?",
                     choices: [
                       "Employee", "Returning Visitor", "New Visitor"
                     ],
@@ -54,14 +65,15 @@ var json = {
             ]
           }, 
           {
-           name:"page3", visibleIf:"{1}='Employee'", "elements": [
+           name:"page2", visibleIf:"{1}='Employee'", "elements": [
                 { 
                       "type": "text",
                       "name": "2",
-                      "title": "Email",
+                      "title": "Your Email",
                       "inputType": "email",
                       "hideNumber": false,
                        isRequired: true,
+                       placeHolder: "jon.snow@nightwatch.org",
                        validators: [
                       {
                        type: "email"
@@ -70,19 +82,20 @@ var json = {
                 },
               ]
           }, {
-           name:"page4", visibleIf:"{1}='Returning Visitor'", "elements": [
+           name:"page3", visibleIf:"{1}='Returning Visitor'", "elements": [
                 { 
                       "type": "text",
                       "name": "3",
                       "title": "Name of person you are here to see?",
                       "inputType": "text",
+                       placeHolder: "Jon Snow",
                       "hideNumber": false,
                        isRequired: true,
                 },
                 { 
                       "type": "text",
-                      "name": "2",
-                      "title": "Email",
+                      "name": "4",
+                      "title": "Your Email",
                       "inputType": "email",
                       "hideNumber": false,
                        isRequired: true,
@@ -94,18 +107,19 @@ var json = {
                 },
               ]
           }, {
-            name:"page5", visibleIf:"{1}='New Visitor'","elements": [
+            name:"page4", visibleIf:"{1}='New Visitor'","elements": [
                 { 
                       "type": "text",
-                      "name": "4",
-                      "title": "Name",
+                      "name": "5",
+                      "title": "Your Name",
                       "inputType": "text",
                       "hideNumber": false,
+                       placeHolder: "John Doe",
                        isRequired: true,
                 },
                 { 
                       "type": "radiogroup",
-                      "name": "5",
+                      "name": "6",
                       "title": "Sex",
                       choices: [
                         "Male", "Female"
@@ -115,39 +129,19 @@ var json = {
                 },
                 { 
                       "type": "text",
-                      "name": "6",
-                      "title": "Work Address",
-                      "hideNumber": false,
-                        isRequired: true,
-                },
-                { 
-                      "type": "text",
                       "name": "7",
-                      "title": "City",
+                      "title": "Address of site you are visiting?",
                       "hideNumber": false,
                         isRequired: true,
                 },
                 { 
                       "type": "text",
                       "name": "8",
-                      "title": "Province",
-                      "hideNumber": false,
-                        isRequired: true,
-                },
-                { 
-                      "type": "text",
-                      "name": "9",
-                      "title": "Postal Code",
-                      "hideNumber": false,
-                        isRequired: true,
-                },
-                { 
-                      "type": "text",
-                      "name": "2",
-                      "title": "Email",
+                      "title": "Your Email",
                       "inputType": "email",
                       "hideNumber": false,
                        isRequired: true,
+                       placeHolder: "jon.snow@nightwatch.org",
                        validators: [
                       {
                        type: "email"
@@ -156,28 +150,29 @@ var json = {
                 },
                 { 
                       "type": "text",
-                      "name": "10",
+                      "name": "9",
                       "title": "Work Phone",
                       "hideNumber": false,
                         isRequired: true,
                 },
                 { 
                       "type": "text",
-                      "name": "11",
+                      "name": "10",
                       "title": "Company Name",
                       "hideNumber": false,
                         isRequired: true,
                 },
                 { 
                       "type": "text",
-                      "name": "3",
+                      "name": "11",
                       "title": "Name of person you are here to see?",
                       "hideNumber": false,
+                       placeHolder: "Jon Snow",
                         isRequired: true,
                 },
               ]
           }, {
-            name:"page6", "elements": [
+            name:"page5", "elements": [
                 {
                     "type": "radiogroup",
                     "name": "12",
@@ -239,12 +234,34 @@ var json = {
   function modifySurveyResults(survey) {
     var resultData = [];
     var output = [];
+    var visitor = [];
     var fail = 0
     for(var key in survey.data) {
       var question = survey.getQuestionByValueName(key);
       if(!!question) {
-        if(question.name=="2"){
+        if(question.name=="1"){
+          var status=question.value;
+        }
+        if(question.name=="2" || question.name=="4" || question.name=="8" ){
           var email = question.value;
+        }
+        if(question.name=="3" || question.name=="11" ){
+          var employee_name = question.value;
+        }
+        if(question.name=="5"){
+          var name = question.value;
+        }
+        if(question.name=="6"){
+          var sex = question.value;
+        }
+        if(question.name=="7"){
+          var work_address = question.value;
+        }
+        if(question.name=="9"){
+          var work_phone = question.value;
+        }
+        if(question.name=="10"){
+          var company_name = question.value;
         }
         if(question.name=="20" && question.value=="No"){
           fail=1
@@ -253,21 +270,35 @@ var json = {
           if(question.name!="20" && question.value=="Yes"){
             fail = 1
           }
-          var item = { answer: question.value, question_id: question.name, email: email };
+          var item = { answer: question.value, question_id: question.name, email: email, time: new Date().toISOString().slice(0, 19).replace('T', ' ') };
           resultData.push(item);
         }
       }
     }
-    item = { email: email, date: new Date().toISOString().slice(0, 10), pass_type: fail }
-    output.push(item);
+    if(status=="New Visitors"){
+      var visitor_item = { name: name, sex: sex, work_address: work_address, work_phone: work_phone, company_name: company_name}
+      visitor.push(visitor_item);
+    }
+    var employee_item = { email: email, employee_name: employee_name, date: new Date().toISOString().slice(0, 10), pass_type: fail }
+    output.push(employee_item);
     return {
       resultData, 
-      output
+      output,
+      visitor
     };
   }
 
 
   function App() {
+    /*
+    const [devID,setDevID] = useState([{Id:null}]);
+    useEffect(() => {   
+      fetch('/visitorGroupID')
+      .then(response => response.json())
+      .then(response => setDevID(response.data))
+      .catch(err => console.log(err))
+    },[])
+    */
     var model = new Survey.Model(json);
     return (
       <div className="container">
