@@ -14,7 +14,7 @@ function onComplete(result){
   console.log(JSON.stringify(output_data))
   console.log(JSON.stringify(data))
   data.forEach((item) => {
-    if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4 && item.question_id!=8 && item.question_id!=11){
+    if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4  && item.question_id!=5 && item.question_id!=6 && item.question_id!=7 && item.question_id!=8 && item.question_id!=9 && item.question_id!=10 && item.question_id!=11){
       var info = JSON.stringify(item)
       var request = new XMLHttpRequest();
       request.open('POST', '/Survey', true);
@@ -29,11 +29,11 @@ function onComplete(result){
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(resultOutput);
   })
-  if(visitor_data){
+  if(visitor_data != null){
     visitor_data.forEach((visitor_item) => {
     var resultVisitor= JSON.stringify(visitor_item)
     var request = new XMLHttpRequest();
-    request.open('POST', '/NewVisitor/${devID[0].Id', true);
+    request.open('POST', '/NewVisitor', true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(resultVisitor);
     })

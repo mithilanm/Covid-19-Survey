@@ -101,7 +101,7 @@ app.get('/visitorGroupID', cors(), async (req, res, next) => {
   }
 });
 
-app.post('/NewVisitors/:id',(req,res) =>{
+app.post('/NewVisitors',(req,res) =>{
   const name=req.body.name;
   const sex=req.body.sex;
   const email=req.body.email;
@@ -110,7 +110,7 @@ app.post('/NewVisitors/:id',(req,res) =>{
   const company_name = req.body.company_name;
   const group_id=req.params.id;
 
-  var sql = "INSERT INTO tb_employees_info (name,sex,group_id,email,phone_num,address,type,upload_time,creator_login_id,banci_id,device_group_ids,att_flag) VALUES (?,?,?,?,?,?,1,NOW(),?,0,?,0)"
+  var sql = "INSERT INTO tb_employees_info (name,sex,group_id,email,phone_num,address,type,upload_time,creator_login_id,banci_id,device_group_ids,att_flag) VALUES (?,?,1,?,?,?,1,NOW(),?,0,?,0)"
   var sql2 = "INSERT INTO employee_info (company_code,yearOfBirth,province,city,postal_code,cell_phone,manager,status,survey_req) VALUES (?,NULL,NULL,NULL,NULL,?,NULL,1,1)"
 
  //Ask danny about status number
