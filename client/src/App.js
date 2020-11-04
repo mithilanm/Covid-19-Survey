@@ -4,14 +4,39 @@ import "survey-react/survey.css"
 import * as Survey from "survey-react";
 
 function App() {
+    const [devID,setDevID] = useState([{Id:null, creator_login_id: null, Company: null}]);
+    const [company, setCompany] = useState([]);
+    var company_name;
+    useEffect(() => {   
+      fetch('/company')
+      .then(response => response.json())
+      .then((response) => {
+        setCompany(response.data);
+      })
+      .catch(err => console.log(err))
+
+      fetch(`/visitorGroupID`)
+      .then(response => response.json())
+      .then(response => setDevID(response.data))
+      .catch(err => console.log(err))
+    },[]);
+
   function onComplete(result){
     var values =  modifySurveyResults(result)
     let data = values.resultData;
     let output_data = values.output;
     let visitor_data = values.visitor;
-    //console.log(JSON.stringify(output_data))
-    //console.log(JSON.stringify(data))
-    //console.log(JSON.stringify(visitor_data))
+    var id;
+    console.log(JSON.stringify(output_data))
+    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(visitor_data))
+    devID.forEach((item) => {
+      if(item.Company == company_name){
+        id = item.Id
+        creator_id = item.creator_login_id
+      }
+    }
+    )
     data.forEach((item) => {
       if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4  && item.question_id!=5 && item.question_id!=6 && item.question_id!=7 && item.question_id!=8 && item.question_id!=9 && item.question_id!=10 && item.question_id!=11){
         var info = JSON.stringify(item)
@@ -31,14 +56,24 @@ function App() {
     visitor_data.forEach((visitor_item) => {
         var resultVisitor= JSON.stringify(visitor_item)
         var request = new XMLHttpRequest();
-        request.open('POST', `/NewVisitors/${devID[0].Id}`, true);
+        request.open('POST', `/NewVisitors/${id}/${creator_id}`, true);
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
         request.send(resultVisitor);
     })
   }
 
   function onValueChanged(result) {
-      console.log("value changed!");
+    /*
+    for(var key in result.data) {
+        var question = result.getQuestionByValueName(key);
+        if(!!question) {
+          if(question.name=="10"){
+            setCompany_Name(question.value)
+          }
+        }
+      }
+    */
+    console.log("value changed!");
   }
   var json = {
         "title": "FirstDash Employee Wellness Survey",
@@ -153,11 +188,15 @@ function App() {
                           isRequired: true,
                   },
                   { 
-                        "type": "text",
+                        "type": "dropdown",
                         "name": "10",
                         "title": "Company Name",
                         "hideNumber": false,
-                          isRequired: true,
+                        isRequired: true,
+                        choicesByUrl: {
+                          url: "/company",
+                          valueName: "company"
+                        }
                   },
                   { 
                         "type": "text",
@@ -261,7 +300,7 @@ function App() {
             var work_phone = question.value;
           }
           if(question.name=="10"){
-            var company_name = question.value;
+            company_name = question.value;
           }
           if(question.name=="20" && question.value=="No"){
             fail=1
@@ -288,13 +327,6 @@ function App() {
       };
     }
 
-    const [devID,setDevID] = useState([{Id:null}]);
-    useEffect(() => {   
-      fetch('/visitorGroupID')
-      .then(response => response.json())
-      .then(response => setDevID(response.data))
-      .catch(err => console.log(err))
-    },[])
     var model = new Survey.Model(json);
     return (
       <div className="container">
