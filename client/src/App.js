@@ -27,6 +27,7 @@ function App() {
     let output_data = values.output;
     let visitor_data = values.visitor;
     var id;
+    var creator_id;
     console.log(JSON.stringify(output_data))
     console.log(JSON.stringify(data))
     console.log(JSON.stringify(visitor_data))
@@ -38,7 +39,7 @@ function App() {
     }
     )
     data.forEach((item) => {
-      if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4  && item.question_id!=5 && item.question_id!=6 && item.question_id!=7 && item.question_id!=8 && item.question_id!=9 && item.question_id!=10 && item.question_id!=11){
+      if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4  && item.question_id!=5 && item.question_id!=6 && item.question_id!=7 && item.question_id!=8 && item.question_id!=9 && item.question_id!=10 && item.question_id!=11 && item.question_id!=12){
         var info = JSON.stringify(item)
         var request = new XMLHttpRequest();
         request.open('POST', '/Survey', true);
@@ -204,55 +205,62 @@ function App() {
                         "title": "Name of person you are here to see?",
                         "hideNumber": false,
                         placeHolder: "Jon Snow",
-                          isRequired: true,
+                        isRequired: true,
+                  },
+                  { 
+                        "type": "text",
+                        "name": "12",
+                        "title": "ID Card Number?",
+                        "hideNumber": false,
+                        isRequired: true,
                   },
                 ]
             }, {
               name:"page5", "elements": [
                   {
                       "type": "radiogroup",
-                      "name": "12",
+                      "name": "13",
                       "title": "Difficulty breathing or shortness of breath",
                       "choices": ["Yes", "No"]
                   }, 
                   {
                     "type": "radiogroup",
-                    "name": "13",
+                    "name": "14",
                     "title": "Cough",
                     "choices": ["Yes", "No"]
                   }, {
                     "type": "radiogroup",
-                    "name": "14",
+                    "name": "15",
                     "title": "Sore throat, trouble swallowing",
                     "choices": ["Yes", "No"]
                   }, {
                     "type": "radiogroup",
-                    "name": "15",
+                    "name": "16",
                     "title": "Runny nose/ stuffy nose or nasal congestion",
                     "choices": ["Yes", "No"]
                   }, {
                     "type": "radiogroup",
-                    "name": "16",
+                    "name": "17",
                     "title": "Decrease or loss of smell or taste",
                     "choices": ["Yes", "No"]
                   }, {
                     "type": "radiogroup",
-                    "name": "17",
+                    "name": "18",
                     "title": "Nausea, vomiting, diarrhea, abdominal pain",
                     "choices": ["Yes", "No"]
                   }, {
                           "type": "radiogroup",
-                          "name": "18",
+                          "name": "19",
                           "title": "Have you travelled outside of Canada in the past 14 days?",
                           "choices": ["Yes", "No"]
                   }, {
                           "type": "radiogroup",
-                          "name": "19",
+                          "name": "20",
                           "title":"Have you had close contact with a confirmed or probable case of COVID-19?",
                           "choices": ["Yes", "No"]
                   }, {
                           "type": "radiogroup",
-                          "name": "20",
+                          "name": "21",
                           "title":"I believe the answers stated in this wellness survey are true",
                           "choices": ["Yes", "No"]
                   }, {
@@ -302,11 +310,14 @@ function App() {
           if(question.name=="10"){
             company_name = question.value;
           }
-          if(question.name=="20" && question.value=="No"){
+          if(question.name=="12"){
+            var id_card_no = question.value;
+          }
+          if(question.name=="21" && question.value=="No"){
             fail=1
           }
           else{
-            if(question.name!="20" && question.value=="Yes"){
+            if(question.name!="21" && question.value=="Yes"){
               fail = 1
             }
             var item = { answer: question.value, question_id: question.name, email: email, time: new Date().toISOString().slice(0, 19).replace('T', ' ') };
@@ -315,7 +326,7 @@ function App() {
         }
       }
       if(status=="New Visitor"){
-        var visitor_item = { name: name, email: email, sex: sex, work_address: work_address, work_phone: work_phone, company_name: company_name}
+        var visitor_item = { name: name, email: email, sex: sex, work_address: work_address, work_phone: work_phone, company_name: company_name, id_card_no: id_card_no}
         visitor.push(visitor_item);
       }
       var employee_item = { email: email, employee_name: employee_name, date: new Date().toISOString().slice(0, 10), pass_type: fail }

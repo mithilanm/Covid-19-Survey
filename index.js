@@ -102,9 +102,8 @@ app.get('/company', cors(), async (req, res, next) => {
 });
 
 app.get('/visitorGroupID', cors(), async (req, res, next) => {
-  var company_name = req.params.company_name;
   try {
-    con.query('SELECT id as Id, company_code as Company FROM tb_employees_group WHERE type=1 AND gmt_deleted IS NULL', [company_name], (err, rows) => {
+    con.query('SELECT id as Id, company_code as Company, creator_login_id FROM tb_employees_group WHERE type=1 AND gmt_deleted IS NULL',  (err, rows) => {
       if (err) {
         console.log(err)
         return res.send(err);
@@ -128,31 +127,13 @@ app.post('/NewVisitors/:id/:creator_id',(req,res) =>{
   const work_address=req.body.work_address;
   const company_name = req.body.company_name;
   const group_id=req.params.id;
+  const id_card_no = req.body.id_card_no;
   const creator_login_id = req.params.creator_id;
 
-  var sql2 = "INSERT INTO tb_employees_info (name,sex,group_id,email,phone_num,address,type,upload_time,creator_login_id,banci_id,device_group_ids,att_flag) VALUES (?,?,?,?,?,?,1,NOW(),?,0,?,0)"
+  var sql2 = "INSERT INTO tb_employees_info (person_id,name,sex,group_id,email,phone_num, id_card_no, address,type,upload_time,creator_login_id,banci_id,device_group_ids,att_flag) VALUES (?,?,?,?,?,?,?,?,1,NOW(),?,0,?,0)"
   var sql3 = "INSERT INTO new_employee_info (id, company_code,yearOfBirth,province,city,postal_code,cell_phone,manager, manager_email, status,survey_req) VALUES (?,?,NULL,NULL,NULL,NULL,?,NULL,'',1,1)"
 
- //Ask danny about status number
- /*
-  mips.query(sql, [name, sex, group_id, email, work_phone, RFID, work_address, req.session.managerLoginID, null], (err, rows, fields) => {
-    if (err) {
-      return res.send(err);
-    }
-  });
-
-  mips.query(sql2, [ req.session.companyCode,  work_phone],
-    (err, rows, fields) => {
-      if (err) {
-        console.log(err)
-        return res.send(err);
-      }
-      else {
-        res.send("Thanks!")
-      }
-    });
-  */
-   con.query(sql2, [name, sex, group_id, email, work_phone, work_address, creator_login_id, null], (err, rows, fields) => {
+   con.query(sql2, [email, name, sex, group_id, email, work_phone, id_card_no, work_address, creator_login_id, null], (err, rows, fields) => {
     if (err) {
       return res.send(err);
     }
