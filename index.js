@@ -83,9 +83,9 @@ app.post('/Survey_Results', (req, res) => {
   })
 });
 
-app.get('/company', cors(), async (req, res, next) => {
+app.get('/company_choice', cors(), async (req, res, next) => {
   try {
-    con.query('SELECT company_code as company FROM login',  (err, rows) => {
+    con.query('SELECT company_code, company_name, manager_login_id FROM login',  (err, rows) => {
       if (err) {
         console.log(err)
         return res.send(err);
@@ -101,9 +101,9 @@ app.get('/company', cors(), async (req, res, next) => {
   }
 });
 
-app.get('/visitorGroupID', cors(), async (req, res, next) => {
+app.get('/company', cors(), async (req, res, next) => {
   try {
-    con.query('SELECT id as Id, company_code as Company, creator_login_id FROM tb_employees_group WHERE type=1 AND gmt_deleted IS NULL',  (err, rows) => {
+    con.query('SELECT company_code, company_name, manager_login_id FROM login',  (err, rows) => {
       if (err) {
         console.log(err)
         return res.send(err);
@@ -119,13 +119,31 @@ app.get('/visitorGroupID', cors(), async (req, res, next) => {
   }
 });
 
-app.post('/NewVisitors/:id/:creator_id',(req,res) =>{
+app.get('/visitorGroupID', cors(), async (req, res, next) => {
+  try {
+    con.query('SELECT id as Id, company_code FROM tb_employees_group WHERE type=1 AND gmt_deleted IS NULL',  (err, rows) => {
+      if (err) {
+        console.log(err)
+        return res.send(err);
+      }
+
+      else
+      console.log(rows)
+        return res.json({ data: rows });
+
+    });
+  } catch (err) {
+    next(err)
+  }
+});
+
+app.post('/NewVisitors/:id/:creator_id/:company_code',(req,res) =>{
   const name=req.body.name;
   const sex=req.body.sex;
   const email=req.body.email;
   const work_phone=req.body.work_phone;
   const work_address=req.body.work_address;
-  const company_name = req.body.company_name;
+  const company_code = req.params.company_code;
   const group_id=req.params.id;
   const id_card_no = req.body.id_card_no;
   const creator_login_id = req.params.creator_id;
@@ -139,7 +157,7 @@ app.post('/NewVisitors/:id/:creator_id',(req,res) =>{
     }
   });
 
-  con.query(sql3, [ email, company_name,  work_phone],
+  con.query(sql3, [ email, company_code,  work_phone],
     (err, rows, fields) => {
       if (err) {
         console.log(err)

@@ -4,15 +4,19 @@ import "survey-react/survey.css"
 import * as Survey from "survey-react";
 
 function App() {
-    const [devID,setDevID] = useState([{Id:null, creator_login_id: null, Company: null}]);
-    const [company, setCompany] = useState([]);
+    const [devID,setDevID] = useState([{Id:null, company_code: null}]);
+    const [company_choice, setCompanyChoice] = useState([{company_code: null, company_name: null, manager_login_id: null}]);
+    const [company, setCompany] = useState([{company_code: null, company_name: null, manager_login_id: null}]);
     var company_name;
     useEffect(() => {   
+      fetch('/company_choice')
+      .then(response => response.json())
+      .then(response => setCompanyChoice(response.data))
+      .catch(err => console.log(err))
+
       fetch('/company')
       .then(response => response.json())
-      .then((response) => {
-        setCompany(response.data);
-      })
+      .then(response => setCompany(response.data))
       .catch(err => console.log(err))
 
       fetch(`/visitorGroupID`)
@@ -22,22 +26,27 @@ function App() {
     },[]);
 
   function onComplete(result){
-    var values =  modifySurveyResults(result)
+    var values =  modifySurveyResults(result);
     let data = values.resultData;
     let output_data = values.output;
     let visitor_data = values.visitor;
     var id;
     var creator_id;
-    console.log(JSON.stringify(output_data))
-    console.log(JSON.stringify(data))
-    console.log(JSON.stringify(visitor_data))
+    var company_code;
+    console.log(JSON.stringify(output_data));
+    console.log(JSON.stringify(data));
+    console.log(JSON.stringify(visitor_data));
+    company.forEach((item) => {
+        if(item.company_name == company_name){
+          company_code = item.company_code;
+          creator_id = item.manager_login_id;
+        }
+    });
     devID.forEach((item) => {
-      if(item.Company == company_name){
+      if(item.company_code == company_code){
         id = item.Id
-        creator_id = item.creator_login_id
       }
-    }
-    )
+    });
     data.forEach((item) => {
       if(item.question_id!=1 && item.question_id!=2 && item.question_id!=3 && item.question_id!=4  && item.question_id!=5 && item.question_id!=6 && item.question_id!=7 && item.question_id!=8 && item.question_id!=9 && item.question_id!=10 && item.question_id!=11 && item.question_id!=12){
         var info = JSON.stringify(item)
@@ -57,7 +66,7 @@ function App() {
     visitor_data.forEach((visitor_item) => {
         var resultVisitor= JSON.stringify(visitor_item)
         var request = new XMLHttpRequest();
-        request.open('POST', `/NewVisitors/${id}/${creator_id}`, true);
+        request.open('POST', `/NewVisitors/${id}/${creator_id}/${company_code}`, true);
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
         request.send(resultVisitor);
     })
@@ -195,8 +204,8 @@ function App() {
                         "hideNumber": false,
                         isRequired: true,
                         choicesByUrl: {
-                          url: "/company",
-                          valueName: "company"
+                          url: "/company_choice",
+                          valueName: "company_name"
                         }
                   },
                   { 
