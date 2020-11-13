@@ -1,7 +1,8 @@
 import React, { useState, useEffect }  from 'react';
-import './App.css';
+import './App.scss';
 import "survey-react/survey.css"
 import * as Survey from "survey-react";
+import Logo from './images/Logo.png';
 
 function App() {
     const [devID,setDevID] = useState([{Id:null, company_code: null}]);
@@ -85,6 +86,18 @@ function App() {
     */
     console.log("value changed!");
   }
+
+  var defaultThemeColors = Survey
+    .StylesManager
+    .ThemeColors["default"];
+defaultThemeColors["$main-color"] = " #47a01a";
+defaultThemeColors["$text-color"] = "#000000";
+defaultThemeColors["$header-color"] = "#47a01a";
+
+Survey
+    .StylesManager
+    .applyTheme();
+    
   var json = {
         "title": "FirstDash Employee Wellness Survey",
         "description": "Thank you for taking the time to complete this survey. Your cooperation is appreciated!",
@@ -115,7 +128,7 @@ function App() {
                         "inputType": "email",
                         "hideNumber": false,
                         isRequired: true,
-                        placeHolder: "jon.snow@nightwatch.org",
+                        placeHolder: "ex. jon.snow@nightwatch.org",
                         validators: [
                         {
                         type: "email"
@@ -130,7 +143,7 @@ function App() {
                         "name": "3",
                         "title": "Name of person you are here to see?",
                         "inputType": "text",
-                        placeHolder: "Jon Snow",
+                        placeHolder: "ex. Jon Snow",
                         "hideNumber": false,
                         isRequired: true,
                   },
@@ -156,7 +169,7 @@ function App() {
                         "title": "Your Name",
                         "inputType": "text",
                         "hideNumber": false,
-                        placeHolder: "John Doe",
+                        placeHolder: "ex. John Doe",
                         isRequired: true,
                   },
                   { 
@@ -183,7 +196,7 @@ function App() {
                         "inputType": "email",
                         "hideNumber": false,
                         isRequired: true,
-                        placeHolder: "jon.snow@nightwatch.org",
+                        placeHolder: "ex. jon.snow@nightwatch.org",
                         validators: [
                         {
                         type: "email"
@@ -213,7 +226,7 @@ function App() {
                         "name": "11",
                         "title": "Name of person you are here to see?",
                         "hideNumber": false,
-                        placeHolder: "Jon Snow",
+                        placeHolder: "ex. Jon Snow",
                         isRequired: true,
                   },
                   { 
@@ -275,7 +288,7 @@ function App() {
                   }, {
                           "type": "html",
                           "name": "results",
-                          "html": "<article class='intro'>  <h1 class='intro__heading intro__heading--income title'>Results of Screening Questions: </h1><ul> \t<li> If the individual answers NO to all questions from 1 through 8, they passed and can enter the workplace \t</li> \t<li>\t\t<p>If the individual answers YES to any questions from 1 through 8, they have not PASSED and should be advised that they should not enter the workplace (including any outdoor, or partially outdoor, workplaces). They should go home to self-isolate immediately and contact their health care provider or Telehealth Ontario (1 866-797-0000) to find out if they need a COVID-19 test.</p> \t\t</li></div> </article>"
+                          "html": "<article class='intro'>  <h2 class='intro__heading intro__heading--income title'>Results of Screening Questions: </h2><ul><li> If the individual answers NO to all questions from 1 through 8, they passed and can enter the workplace.</li><li><p>If the individual answers YES to any questions from 1 through 8, they have not PASSED and should be advised that they should not enter the workplace (including any outdoor, or partially outdoor, workplaces). They should go home to self-isolate immediately and contact their health care provider or Telehealth Ontario (1 866-797-0000) to find out if they need a COVID-19 test.</p></li></div></article>"
                   } 
               ]
             }
@@ -350,6 +363,9 @@ function App() {
     var model = new Survey.Model(json);
     return (
       <div className="container">
+        <div className="outer">
+          <img className="logo" alt="Logo" src={require('./images/FirstDashLogo (Black).png')}/>
+        </div>
         <Survey.Survey
           model={model}
           onComplete={onComplete}

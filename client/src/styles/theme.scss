@@ -1,0 +1,71 @@
+/*This sheet contains the theming (colours, fonts, sizing, borders) for the FirstDash web application*/
+
+/*Colours*/
+$first-green: #47a01a;
+$first-orange: #ed9200;
+$gray-900: #000000;
+$gray-700: #4a4a4a;
+$gray-500: #848484;
+$gray-300: #bababa;
+$gray-100: #d9d9d9;
+$background-white: #ffffff;
+
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+$font-stack: "Montserrat", sans-serif;
+
+/*Sizing*/
+$title-size: 42px;
+$table-header-size: 29px;
+$header-size: 32px;
+$chart-header-size: 24px;
+$body-size: 18px;
+$dropdown-size: 16px;
+
+/*Borders*/
+$border-shadow: 0px 4px 24px $gray-100;
+$border-radius: 12px;
+
+/*Mixins*/
+@mixin title-text {
+  font-weight: bold;
+  font-size: $title-size;
+}
+
+@mixin header-text {
+  font-weight: normal;
+  font-size: $header-size;
+}
+
+@mixin chart-header-text {
+  font-weight: bold;
+  font-size: $chart-header-size;
+}
+
+@mixin body-text {
+  font-weight: normal;
+  font-size: $body-size;
+}
+
+@mixin dropdown-text {
+  font-weight: normal;
+  font-size: $dropdown-size;
+}
+
+@mixin box-borders {
+  border: 2px solid $gray-100;
+  box-shadow: $border-shadow;
+  border-radius: $border-radius;
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1920px) {
+  $title-size: 42px;
+  $table-header-size: 29px;
+  $header-size: 32px;
+  $chart-header-size: 24px;
+  $body-size: 18px;
+  $dropdown-size: 16px;
+}
+
+@import "~bootstrap/scss/bootstrap.scss";
